@@ -178,3 +178,7 @@
 [2025-04-14T18:39:05.821Z] ERROR: Error: bad auth : authentication failed
 [2025-04-14T18:40:04.861Z] INFO: Server running at http://localhost:3000
 [2025-04-14T18:40:06.239Z] ERROR: Error: bad auth : authentication failed
+[2025-04-14T18:41:41.382Z] INFO: Server running at http://localhost:3000
+[2025-04-14T18:41:42.474Z] INFO: MongoDB connected: ac-tw1h7bz-shard-00-01.mtyhope.mongodb.net
+[2025-04-14T19:01:49.482Z] INFO: Server running at http://localhost:3000
+[2025-04-14T19:01:51.393Z] INFO: MongoDB connected: ac-tw1h7bz-shard-00-00.mtyhope.mongodb.net
