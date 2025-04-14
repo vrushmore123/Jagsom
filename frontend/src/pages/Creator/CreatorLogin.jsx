@@ -9,29 +9,37 @@ const CreatorLogin = () => {
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
-
+  
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    
+  
     try {
       console.log('Attempting login with:', formData);
-      
+  
       const response = await fetch("http://localhost:3000/api/creators/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)
       });
-      
+  
       const data = await response.json();
       console.log('Login response:', data);
-      
+  
       if (!response.ok) {
         throw new Error(data.message || "Login failed");
       }
-      
-      localStorage.setItem("creator", JSON.stringify(data));
+  
+      // ✅ Store token with consistent name
+      if (data.token) {
+        localStorage.setItem("token", data.token); // <- unified token name
+        localStorage.setItem("creator", JSON.stringify(data.creator));
+        console.log("Token stored:", data.token);
+      }
+  
+      // ✅ Navigate after login
       navigate("/creator/dashboard");
+  
     } catch (err) {
       console.error('Login error:', err);
       alert(err.message || "Login failed");
@@ -39,6 +47,9 @@ const CreatorLogin = () => {
       setIsLoading(false);
     }
   };
+  
+  const token = localStorage.getItem("token");
+  
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
