@@ -4,26 +4,65 @@ const Creator = require("../models/creatorModel");
 
 
 const registerCreator = async (req, res) => {
-    const { name, email, password, age, category } = req.body;
-  
-    try {
-      const existing = await Creator.findOne({ email });
-      if (existing) return res.status(400).json({ message: "Email already exists" });
-  
-      const newCreator = new Creator({
-        name,
-        email,
-        password, // Let the pre-save hook handle hashing
-        age,
-        category
-      });
-  
-      await newCreator.save();
-      res.status(201).json({ message: "Creator registered successfully" });
-    } catch (err) {
-      res.status(500).json({ message: "Something went wrong", error: err.message });
+  const { 
+    name, 
+    email, 
+    password, 
+    age, 
+    category,
+   
+    
+  } = req.body;
+
+  try {
+    // Validate required fields
+    if (!name || !email || !password || !age || !category) {
+      return res.status(400).json({ message: "All required fields must be provided" });
     }
-  };
+
+    const existing = await Creator.findOne({ email });
+    if (existing) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
+    const newCreator = new Creator({
+      name,
+      email,
+      password, // Will be hashed by pre-save hook
+      age: parseInt(age),
+      category,
+   
+    });
+
+    await newCreator.save();
+    
+    // Don't send back the password hash
+    const creatorResponse = newCreator.toObject();
+    delete creatorResponse.password;
+    
+    res.status(201).json({ 
+      message: "Creator registered successfully",
+      creator: creatorResponse
+    });
+  } catch (err) {
+    console.error('Registration error:', err);
+    
+    // Handle Mongoose validation errors
+    if (err.name === 'ValidationError') {
+      const errors = {};
+      Object.keys(err.errors).forEach(key => {
+        errors[key] = err.errors[key].message;
+      });
+      return res.status(400).json({ message: "Validation failed", errors });
+    }
+    
+    res.status(500).json({ 
+      message: "Registration failed",
+      error: err.message 
+    });
+  }
+};
+
 
 const loginCreator = async (req, res) => {
     const { email, password } = req.body;

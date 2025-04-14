@@ -8,15 +8,20 @@ const CreatorRegister = () => {
     password: "", 
     confirmPassword: "",
     age: "",
-    category: "Visuals" // Default value from schema
+    category: "Visuals"
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -29,7 +34,6 @@ const CreatorRegister = () => {
     setIsLoading(true);
     
     try {
-      // Using fetch instead of axios to avoid dependencies
       const response = await fetch("http://localhost:3000/api/creators/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -45,17 +49,101 @@ const CreatorRegister = () => {
       const data = await response.json();
       
       if (!response.ok) {
-        throw new Error(data.message || "Registration failed");
+        const errorMsg = data.message || 
+                        (data.errors ? Object.values(data.errors).join('\n') : 
+                        'Registration failed');
+        throw new Error(errorMsg);
       }
       
-      localStorage.setItem("creator", JSON.stringify(data));
+      alert("Registration successful! Please login.");
       navigate("/creator/login");
     } catch (err) {
-      alert(err.message || "Registration failed");
+      console.error('Registration error:', err);
+      alert(err.message || "Registration failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
+
+  // Add these styles to your existing styles object
+  const additionalStyles = {
+    supportSection: {
+      marginTop: "24px",
+      padding: "16px",
+      backgroundColor: "#f9fafb",
+      borderRadius: "8px",
+      border: "1px solid #e5e7eb"
+    },
+    supportTitle: {
+      fontSize: "16px",
+      fontWeight: "600",
+      marginBottom: "12px",
+      color: "#374151"
+    },
+    checkboxContainer: {
+      display: "flex",
+      alignItems: "center",
+      marginBottom: "16px"
+    },
+    checkbox: {
+      marginRight: "8px",
+      width: "16px",
+      height: "16px",
+      accentColor: "#4f46e5"
+    },
+    checkboxLabel: {
+      fontSize: "14px",
+      color: "#374151",
+      cursor: "pointer"
+    },
+    emotionsContainer: {
+      display: "flex",
+      flexWrap: "wrap",
+      gap: "8px",
+      marginBottom: "16px"
+    },
+    emotionPill: {
+      padding: "6px 12px",
+      borderRadius: "20px",
+      fontSize: "13px",
+      fontWeight: "500",
+      cursor: "pointer",
+      border: "1px solid #d1d5db",
+      backgroundColor: "#ffffff",
+      transition: "all 0.2s ease"
+    },
+    selectedEmotionPill: {
+      backgroundColor: "#eef2ff",
+      borderColor: "#4f46e5",
+      color: "#4f46e5"
+    },
+    availabilityForm: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr 1fr auto",
+      gap: "12px",
+      marginBottom: "16px",
+      alignItems: "flex-end"
+    },
+    availabilityItem: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: "8px 12px",
+      backgroundColor: "#ffffff",
+      border: "1px solid #e5e7eb",
+      borderRadius: "6px",
+      marginBottom: "8px"
+    },
+    removeButton: {
+      background: "none",
+      border: "none",
+      color: "#ef4444",
+      cursor: "pointer",
+      fontSize: "14px",
+      fontWeight: "600"
+    }
+  };
+
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
@@ -85,7 +173,7 @@ const CreatorRegister = () => {
       color: "white",
       textAlign: "center"
     },
-    cardTitle: {
+    registerCardTitle: {
       fontSize: "24px",
       fontWeight: "700",
       margin: "0 0 8px 0"
@@ -231,7 +319,8 @@ const CreatorRegister = () => {
       top: "50%",
       transform: "translateY(-50%)",
       pointerEvents: "none"
-    }
+    },
+    ...additionalStyles
   };
 
   // CSS for custom scrollbar
@@ -446,12 +535,13 @@ const CreatorRegister = () => {
       <style>{scrollbarStyles}</style>
       <div style={styles.card}>
         <div style={styles.cardHeader}>
-          <h2 style={styles.cardTitle}>Creator Registration</h2>
+          <h2 style={styles.registerCardTitle}>Creator Registration</h2>
           <p style={styles.cardSubtitle}>Create your creator account</p>
         </div>
         
         <div style={styles.cardBody} className="custom-scrollbar">
           <form style={styles.form} onSubmit={handleRegister}>
+            {/* Name Field */}
             <div style={styles.formGroup}>
               <label htmlFor="name" style={styles.label}>Full Name</label>
               <div style={styles.inputWrapper}>
@@ -464,12 +554,11 @@ const CreatorRegister = () => {
                   placeholder="John Doe"
                   onChange={handleChange}
                   style={styles.input}
-                  onFocus={(e) => e.target.style.cssText = focusStyle}
-                  onBlur={(e) => e.target.style.cssText = blurStyle}
                 />
               </div>
             </div>
 
+            {/* Email Field */}
             <div style={styles.formGroup}>
               <label htmlFor="email" style={styles.label}>Email Address</label>
               <div style={styles.inputWrapper}>
@@ -482,12 +571,11 @@ const CreatorRegister = () => {
                   placeholder="you@example.com"
                   onChange={handleChange}
                   style={styles.input}
-                  onFocus={(e) => e.target.style.cssText = focusStyle}
-                  onBlur={(e) => e.target.style.cssText = blurStyle}
                 />
               </div>
             </div>
             
+            {/* Age Field */}
             <div style={styles.formGroup}>
               <label htmlFor="age" style={styles.label}>Age</label>
               <div style={styles.inputWrapper}>
@@ -501,12 +589,11 @@ const CreatorRegister = () => {
                   placeholder="25"
                   onChange={handleChange}
                   style={styles.input}
-                  onFocus={(e) => e.target.style.cssText = focusStyle}
-                  onBlur={(e) => e.target.style.cssText = blurStyle}
                 />
               </div>
             </div>
 
+            {/* Category Field */}
             <div style={styles.formGroup}>
               <label htmlFor="category" style={styles.label}>Category</label>
               <div style={styles.inputWrapper}>
@@ -518,8 +605,6 @@ const CreatorRegister = () => {
                   value={formData.category}
                   onChange={handleChange}
                   style={styles.selectInput}
-                  onFocus={(e) => e.target.style.cssText = focusStyle + "appearance: none;"}
-                  onBlur={(e) => e.target.style.cssText = blurStyle + "appearance: none;"}
                 >
                   <option value="Visuals">Visuals</option>
                   <option value="Culture">Culture</option>
@@ -529,6 +614,7 @@ const CreatorRegister = () => {
               </div>
             </div>
             
+            {/* Password Field */}
             <div style={styles.formGroup}>
               <label htmlFor="password" style={styles.label}>Password</label>
               <div style={styles.inputWrapper}>
@@ -541,20 +627,18 @@ const CreatorRegister = () => {
                   placeholder="••••••••"
                   onChange={handleChange}
                   style={styles.input}
-                  onFocus={(e) => e.target.style.cssText = focusStyle}
-                  onBlur={(e) => e.target.style.cssText = blurStyle}
                 />
                 <button
                   type="button"
                   onClick={togglePasswordVisibility}
                   style={styles.togglePasswordButton}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? icons.eyeClosed : icons.eyeOpen}
                 </button>
               </div>
             </div>
 
+            {/* Confirm Password Field */}
             <div style={styles.formGroup}>
               <label htmlFor="confirmPassword" style={styles.label}>Confirm Password</label>
               <div style={styles.inputWrapper}>
@@ -567,26 +651,22 @@ const CreatorRegister = () => {
                   placeholder="••••••••"
                   onChange={handleChange}
                   style={styles.input}
-                  onFocus={(e) => e.target.style.cssText = focusStyle}
-                  onBlur={(e) => e.target.style.cssText = blurStyle}
                 />
                 <button
                   type="button"
                   onClick={toggleConfirmPasswordVisibility}
                   style={styles.togglePasswordButton}
-                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
                 >
                   {showConfirmPassword ? icons.eyeClosed : icons.eyeOpen}
                 </button>
               </div>
             </div>
             
+            {/* Register Button */}
             <button
               type="submit"
               disabled={isLoading}
               style={isLoading ? {...styles.button, ...styles.buttonDisabled} : styles.button}
-              onMouseOver={(e) => !isLoading && (e.target.style.backgroundColor = "#4338ca", e.target.style.transform = "translateY(-2px)", e.target.style.boxShadow = "0 6px 10px rgba(79, 70, 229, 0.3)")}
-              onMouseOut={(e) => !isLoading && (e.target.style.backgroundColor = "#4f46e5", e.target.style.transform = "", e.target.style.boxShadow = "0 4px 6px rgba(79, 70, 229, 0.25)")}
             >
               {isLoading ? (
                 <>
@@ -599,14 +679,13 @@ const CreatorRegister = () => {
             </button>
           </form>
           
+          {/* Login Link */}
           <div style={styles.loginContainer}>
             <p>
               Already have an account?{" "}
               <button
                 onClick={() => navigate("/creator/login")}
                 style={styles.loginLink}
-                onMouseOver={(e) => (e.target.style.color = "#4338ca", e.target.style.textDecoration = "underline")}
-                onMouseOut={(e) => (e.target.style.color = "#4f46e5", e.target.style.textDecoration = "none")}
               >
                 Sign in
               </button>

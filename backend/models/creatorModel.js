@@ -10,19 +10,44 @@ const creatorSchema = new mongoose.Schema(
     category: { 
       type: String, 
       required: true, 
-      enum: ['Visuals', 'Culture', 'Meeting'],  // predefined options for category
-      default: 'Visuals'  // Default value if not provided
+      enum: ['Visuals', 'Culture', 'Meeting'],
+      default: 'Visuals'
     },
+    availableForSupport: {
+      type: Boolean,
+      default: false,
+    },
+    supportEmotions: {
+      type: [String],
+      enum: ['sad', 'anxious', 'angry', 'lonely', 'stressed'],
+      default: [],
+    },
+    availability: [{
+      day: { type: String, enum: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] },
+      startTime: String,
+      endTime: String,
+    }],
+    currentStatus: {
+      type: String,
+      enum: ['online', 'offline', 'in-meeting'],
+      default: 'offline'
+    },
+    upcomingMeetings: [{
+      userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      emotion: String,
+      dateTime: Date,
+      status: { type: String, enum: ['pending', 'accepted', 'rejected'], default: 'pending' },
+      meetLink: String
+    }],
+    rating: { type: Number, default: 0 },
+    supportCount: { type: Number, default: 0 }
   },
   { timestamps: true }
 );
 
-// Hash password before saving
 creatorSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
-
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  this.password = await bcrypt.hash(this.password, 12); 
   next();
 });
 

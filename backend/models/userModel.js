@@ -5,15 +5,19 @@ const userSchema = new mongoose.Schema({
   name: String,
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, default: "user" }, // optional
+  role: { type: String, default: "user" },
+  upcomingMeetings: [{
+    creatorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Creator' },
+    emotion: String,
+    dateTime: Date,
+    status: { type: String, enum: ['pending', 'accepted', 'rejected'], default: 'pending' },
+    meetLink: String
+  }]
 });
 
-// 🔐 Hash password before saving
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
-
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  this.password = await bcrypt.hash(this.password, 12); 
   next();
 });
 
