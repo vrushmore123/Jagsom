@@ -35,6 +35,17 @@ app.use("/api/admin", adminRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/videos', videoRoutes);
 // Start the server
+
+
+// Correct relative path to dist folder
+const distPath = path.join(__dirname, "..", "frontend", "dist");
+
+app.use(express.static(distPath));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(distPath, "index.html"));
+});
+
 app.listen(PORT, () => {
   logger.info(`Server running at http://localhost:${PORT}`);
 });
