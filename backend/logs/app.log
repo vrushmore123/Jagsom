@@ -170,3 +170,11 @@
 [2025-04-14T14:53:50.574Z] INFO: MongoDB connected: localhost
 [2025-04-14T14:54:00.199Z] INFO: Server running at http://localhost:3000
 [2025-04-14T14:54:00.250Z] INFO: MongoDB connected: localhost
+[2025-04-14T18:35:56.104Z] INFO: Server running at http://localhost:3000
+[2025-04-14T18:36:26.944Z] ERROR: Error: Could not connect to any servers in your MongoDB Atlas cluster. One common reason is that you're trying to access the database from an IP that isn't whitelisted. Make sure your current IP address is on your Atlas cluster's IP whitelist: https://www.mongodb.com/docs/atlas/security-whitelist/
+[2025-04-14T18:38:10.699Z] INFO: Server running at http://localhost:3000
+[2025-04-14T18:38:11.924Z] ERROR: Error: bad auth : authentication failed
+[2025-04-14T18:39:04.841Z] INFO: Server running at http://localhost:3000
+[2025-04-14T18:39:05.821Z] ERROR: Error: bad auth : authentication failed
+[2025-04-14T18:40:04.861Z] INFO: Server running at http://localhost:3000
+[2025-04-14T18:40:06.239Z] ERROR: Error: bad auth : authentication failed
