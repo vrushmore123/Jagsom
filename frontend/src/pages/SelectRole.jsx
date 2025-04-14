@@ -67,7 +67,7 @@ const SelectRole = () => {
       fontSize: "1.1rem",
       cursor: "pointer",
       borderRadius: "14px",
-      border: "none",
+      
       background: "rgba(255, 255, 255, 0.1)",
       color: "white",
       boxShadow: "0 8px 20px rgba(0, 0, 0, 0.15)",
