@@ -1,11 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const { registerCreator, loginCreator } = require("../controllers/creatorController");
+const {
+  registerCreator,
+  loginCreator,
+  addVisualPost,
+  getVisualPosts,
+} = require("../controllers/creatorController");
 const { authenticateCreator } = require("../middlewares/authMiddleware");
 const Creator = require( '../models/creatorModel.js');
+const verifyToken = require("../middlewares/token");
 
 router.post("/register", registerCreator);
 router.post("/login", loginCreator);
+router.post("/:id/visuals", verifyToken, addVisualPost);
+router.get("/:id/visuals", getVisualPosts);
 
 router.get('/profile', async (req, res) => {
     try {

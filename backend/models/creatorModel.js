@@ -1,12 +1,32 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
+const visualPostSchema = new mongoose.Schema(
+  {
+    type: {
+      type: String,
+      enum: ['Handwritten Letters', 'Live Concerts', 'Poems', 'Photo Shoots', 'Creative Spark'],
+      required: true,
+    },
+    content: { type: String, required: true }, // Can be text, link, description, etc.
+    mediaUrl: { type: String }, // Optional media link
+    createdAt: { type: Date, default: Date.now }
+  },
+  { _id: false } // Prevent nested _id fields in subdocuments
+);
+
 const creatorSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     age: { type: Number, required: true },
+    category: {
+      type: String,
+      required: true,
+      enum: ['Visuals', 'Culture', 'Meeting'],
+      default: 'Visuals'
+    },
     category: { 
       type: String, 
       required: true, 
@@ -40,7 +60,9 @@ const creatorSchema = new mongoose.Schema(
       meetLink: String
     }],
     rating: { type: Number, default: 0 },
-    supportCount: { type: Number, default: 0 }
+    supportCount: { type: Number, default: 0 },
+  
+    visualPosts: [visualPostSchema], // New field for creator’s posts under Visuals
   },
   { timestamps: true }
 );

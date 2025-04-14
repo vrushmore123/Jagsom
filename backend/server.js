@@ -11,11 +11,11 @@ const PORT = process.env.PORT || 3000;
 
 // Connect to database
 connectDB();
-
 app.use("/api/creators", creatorRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/meetings", meetingRoutes);
+
 
 
 // Start the server

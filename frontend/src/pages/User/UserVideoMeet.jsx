@@ -56,9 +56,9 @@ const UserVideoMeet = () => {
   useEffect(() => {
     if (availableCreators.length === 0 && process.env.NODE_ENV === 'development') {
       setAvailableCreators([
-        {_id: '1', name: 'Sarah Johnson', avatar: '/api/placeholder/64/64', supportEmotions: ['sad', 'anxious'], rating: 4.9, sessions: 152},
-        {_id: '2', name: 'Michael Chen', avatar: '/api/placeholder/64/64', supportEmotions: ['angry', 'stressed'], rating: 4.7, sessions: 89},
-        {_id: '3', name: 'Aisha Patel', avatar: '/api/placeholder/64/64', supportEmotions: ['lonely', 'sad'], rating: 4.8, sessions: 210}
+        {_id: '1', name: 'Sarah Johnson', supportEmotions: ['sad', 'anxious'], rating: 4.9, sessions: 152},
+        {_id: '2', name: 'Michael Chen', supportEmotions: ['angry', 'stressed'], rating: 4.7, sessions: 89},
+        {_id: '3', name: 'Aisha Patel', supportEmotions: ['lonely', 'sad'], rating: 4.8, sessions: 210}
       ]);
     }
   }, []);
@@ -133,9 +133,9 @@ const UserVideoMeet = () => {
                 {availableCreators.map(creator => (
                   <div key={creator._id} className="creator-card">
                     <div className="creator-header">
-                      <div className="creator-avatar">
+                      {/* <div className="creator-avatar">
                         <img src={creator.avatar || "/api/placeholder/64/64"} alt={creator.name} />
-                      </div>
+                      </div> */}
                       <div className="creator-info">
                         <h3>{creator.name}</h3>
                         <div className="creator-rating">
