@@ -12,7 +12,9 @@ import Visuals from "./pages/User/UserVisuals";
 import CreaterDashboard from "./pages/Creator/CreatorDashboard";
 import SelectRole from "./pages/SelectRole";
 import UserDashboard from "./pages/User/Dashboard";
+import CultureDashboard from "./pages/User/UserDashboard";
 import Home from "./pages/Home";
+import UploadVideo from "./pages/Creator/Videoupload";
 
 const App = () => {
   return (
@@ -20,10 +22,10 @@ const App = () => {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/user/dashboard" element={<UserDashboard />} />
+        <Route path="/user/culturedashboard" element={<CultureDashboard />} />
         <Route path="/user/register" element={<UserRegister />} />
         <Route path="/user/login" element={<UserLogin />} />
-        <Route path="/user/dashboard" element={<UserFeed />} />
+        <Route path="/user/dashboard" element={<UserDashboard  />} />
 
         {/* Creator Routes */}
         <Route path="/creator/register" element={<CreatorRegister />} />
