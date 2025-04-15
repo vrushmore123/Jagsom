@@ -128,7 +128,7 @@ const VideoUpload = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/videos/upload",
+        "https://jagsom-2.onrender.com/api/videos/upload",
         formData,
         {
           headers: {

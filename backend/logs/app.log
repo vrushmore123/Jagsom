@@ -200,3 +200,5 @@
 [2025-04-15T11:30:29.452Z] INFO: MongoDB connected: ac-tw1h7bz-shard-00-01.mtyhope.mongodb.net
 [2025-04-15T11:31:30.108Z] INFO: Server running at http://localhost:3000
 [2025-04-15T11:31:30.604Z] INFO: MongoDB connected: ac-tw1h7bz-shard-00-00.mtyhope.mongodb.net
+[2025-04-15T11:32:10.890Z] INFO: Server running at http://localhost:3000
+[2025-04-15T11:32:11.326Z] INFO: MongoDB connected: ac-tw1h7bz-shard-00-02.mtyhope.mongodb.net

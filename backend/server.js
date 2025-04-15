@@ -14,15 +14,12 @@ const PORT = process.env.PORT || 3000;
 // Connect to database
 connectDB();
 
-app.use(cors());
-const corsOptions = {
-  origin: ['http://localhost:5173', 'https://jagsom-2.onrender.com'],
-  credentials: true, // if you're using cookies or sessions // Change this to match your frontend URL
-  methods: 'GET,POST',
-  allowedHeaders: 'Content-Type,Authorization',
-};
+const cors = require('cors');
 
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: ['http://localhost:5173', 'https://jagsom-2.onrender.com'],
+  credentials: true // if you're using cookies or sessions
+}));
 
 // Adjust based on your file structure
 app.use('/api', videoRoutes); // This ensures your routes are prefixed with /api

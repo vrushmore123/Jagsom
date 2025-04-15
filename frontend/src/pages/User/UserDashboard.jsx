@@ -12,7 +12,7 @@ const UserDashboard = () => {
       const token = localStorage.getItem('token');
       if (!token) throw new Error('No token found. Please log in.');
 
-      const response = await axios.get("http://localhost:3000/api/videos", {
+      const response = await axios.get("https://jagsom-2.onrender.com/api/videos", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
