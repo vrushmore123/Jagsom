@@ -16,7 +16,8 @@ connectDB();
 
 app.use(cors());
 const corsOptions = {
-  origin: 'http://localhost:5173', // Change this to match your frontend URL
+  origin: ['http://localhost:5173', 'https://jagsom-2.onrender.com'],
+  credentials: true, // if you're using cookies or sessions // Change this to match your frontend URL
   methods: 'GET,POST',
   allowedHeaders: 'Content-Type,Authorization',
 };

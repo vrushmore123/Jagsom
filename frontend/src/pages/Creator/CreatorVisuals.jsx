@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const CreatorDashboard = () => {
+const CreatorVisuals = () => {
   const [type, setType] = useState("");
   const [content, setContent] = useState("");
   const [mediaUrl, setMediaUrl] = useState("");
@@ -112,4 +112,4 @@ const CreatorDashboard = () => {
   );
 };
 
-export default CreatorDashboard;
+export default CreatorVisuals;
