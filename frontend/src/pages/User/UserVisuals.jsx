@@ -40,7 +40,7 @@ export default function VisualsPage() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/users/visulas") // Update with your server port
+      .get("https://jagsom-2.onrender.com/api/users/visulas") // Update with your server port
       .then((res) => {
         const data = res.data;
         const grouped = {};

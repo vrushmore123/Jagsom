@@ -30,7 +30,7 @@ const CreatorRegister = () => {
     
     try {
       // Using fetch instead of axios to avoid dependencies
-      const response = await fetch("http://localhost:3000/api/creators/register", {
+      const response = await fetch("https://jagsom-2.onrender.com/api/creators/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

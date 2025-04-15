@@ -18,7 +18,7 @@ const CreatorLogin = () => {
     try {
       console.log('Attempting login with:', formData);
   
-      const response = await fetch("http://localhost:3000/api/creators/login", {
+      const response = await fetch("https://jagsom-2.onrender.com/api/creators/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

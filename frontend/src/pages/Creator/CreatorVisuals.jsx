@@ -38,7 +38,7 @@ const CreatorVisuals = () => {
 
     try {
       const res = await axios.post(
-        `http://localhost:3000/api/creators/${creatorId}/visuals`,
+        `https://jagsom-2.onrender.com/api/creators/${creatorId}/visuals`,
         { type, content, mediaUrl },
         {
           headers: {
