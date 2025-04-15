@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Calendar, Clock, Video, X, CheckCircle, XCircle, Settings, User } from 'lucide-react';
 
 const CreatorVideoMeetPage = () => {
@@ -62,27 +61,6 @@ const CreatorVideoMeetPage = () => {
     }
   }, [upcomingMeetings.length]);
 
-//   useEffect(() => {
-//     // Fetch creator's existing settings and meetings
-//     const fetchCreatorData = async () => {
-//       try {
-//         const response = await fetch('/api/creators/profile');
-//         if (response.ok) {
-//           const data = await response.json();
-//           setAvailableForSupport(data.availableForSupport);
-//           setSupportEmotions(data.supportEmotions);
-//           setAvailability(data.availability);
-//           setUpcomingMeetings(data.upcomingMeetings);
-//           setCurrentStatus(data.currentStatus);
-//         }
-//       } catch (error) {
-//         console.error('Error fetching creator data:', error);
-//       }
-//     };
-//     // Comment out to use mock data instead
-//     // fetchCreatorData();
-//   }, []);
-
   const handleEmotionToggle = (emotion) => {
     setSupportEmotions(prev =>
       prev.includes(emotion)
@@ -123,7 +101,6 @@ const CreatorVideoMeetPage = () => {
       if (m._id === meetingId) {
         const updatedMeeting = { ...m, status: action };
         
-        // Generate a Google Meet link for accepted meetings
         if (action === 'accepted' && !updatedMeeting.meetLink) {
           updatedMeeting.meetLink = generateGoogleMeetLink();
         }
@@ -138,55 +115,59 @@ const CreatorVideoMeetPage = () => {
 
   const getStatusColor = (status) => {
     switch(status) {
-      case 'online': return 'status-online';
-      case 'offline': return 'status-offline';
-      case 'in-meeting': return 'status-in-meeting';
-      default: return 'status-offline';
+      case 'online': return 'bg-emerald-500';
+      case 'offline': return 'bg-gray-500';
+      case 'in-meeting': return 'bg-amber-500';
+      default: return 'bg-gray-500';
     }
   };
   
   const getEmotionColor = (emotion) => {
     switch(emotion) {
-      case 'sad': return 'emotion-sad';
-      case 'anxious': return 'emotion-anxious';
-      case 'angry': return 'emotion-angry';
-      case 'lonely': return 'emotion-lonely';
-      case 'stressed': return 'emotion-stressed';
-      default: return 'emotion-default';
+      case 'sad': return 'bg-blue-100 text-blue-800';
+      case 'anxious': return 'bg-amber-100 text-amber-800';
+      case 'angry': return 'bg-red-100 text-red-800';
+      case 'lonely': return 'bg-purple-100 text-purple-800';
+      case 'stressed': return 'bg-orange-100 text-orange-800';
+      default: return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getMeetingStatusClass = (status) => {
     switch(status) {
-      case 'pending': return 'meeting-pending';
-      case 'accepted': return 'meeting-accepted';
-      case 'rejected': return 'meeting-rejected';
-      default: return 'meeting-pending';
+      case 'pending': return 'bg-amber-100 text-amber-800';
+      case 'accepted': return 'bg-emerald-100 text-emerald-800';
+      case 'rejected': return 'bg-red-100 text-red-800';
+      default: return 'bg-amber-100 text-amber-800';
     }
   };
 
   return (
-    <div className="page-container">
+    <div className="min-h-screen pt-16 bg-gray-50">
       {/* Header with status */}
-      <div className="header">
-        <div className="header-content">
-          <div className="header-main">
-            <div className="header-logo">
-              <Video className="logo-icon" />
-              <h1 className="header-title">Video Support Dashboard</h1>
+      <div className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center py-6 gap-4">
+            <div className="flex items-center">
+              <Video className="h-8 w-8 text-indigo-600" />
+              <h1 className="ml-2 text-2xl font-bold text-gray-900">Video Support Dashboard</h1>
             </div>
             
-            <div className="header-controls">
-              <div className="status-indicator">
-                <div className={`status-dot ${getStatusColor(currentStatus)}`}></div>
-                <span className="status-text">{currentStatus.charAt(0).toUpperCase() + currentStatus.slice(1)}</span>
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <div className="flex items-center">
+                <div className={`h-3 w-3 rounded-full mr-2 ${getStatusColor(currentStatus)}`}></div>
+                <span className="text-sm font-medium text-gray-700 capitalize">{currentStatus}</span>
               </div>
               
-              <div className="status-toggle">
+              <div className="flex bg-gray-100 rounded-lg p-1">
                 {['online', 'offline', 'in-meeting'].map(status => (
                   <button
                     key={status}
-                    className={`status-button ${currentStatus === status ? 'status-button-active' : ''}`}
+                    className={`px-3 py-1 text-sm rounded-md transition-colors ${
+                      currentStatus === status 
+                        ? 'bg-white text-indigo-600 shadow-sm' 
+                        : 'text-gray-600 hover:text-gray-800'
+                    }`}
                     onClick={() => handleStatusChange(status)}
                   >
                     {status === 'online' ? 'Online' : status === 'offline' ? 'Offline' : 'In Meeting'}
@@ -194,31 +175,39 @@ const CreatorVideoMeetPage = () => {
                 ))}
               </div>
               
-              <label className="availability-toggle">
+              <label className="relative inline-flex items-center cursor-pointer">
                 <input
                   type="checkbox"
                   checked={availableForSupport}
                   onChange={(e) => setAvailableForSupport(e.target.checked)}
-                  className="toggle-input"
+                  className="sr-only peer"
                 />
-                <div className="toggle-slider"></div>
-                <span className="toggle-label">Available for Support</span>
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                <span className="ml-3 text-sm font-medium text-gray-700">Available for Support</span>
               </label>
             </div>
           </div>
           
           {/* Navigation Tabs */}
-          <div className="navigation-tabs">
-            <nav className="tabs-container">
+          <div className="border-b border-gray-200">
+            <nav className="-mb-px flex space-x-8">
               <button
                 onClick={() => setActiveTab('meetings')}
-                className={`tab-button ${activeTab === 'meetings' ? 'tab-active' : ''}`}
+                className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === 'meetings' 
+                    ? 'border-indigo-500 text-indigo-600' 
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
               >
                 Upcoming Meetings
               </button>
               <button
                 onClick={() => setActiveTab('settings')}
-                className={`tab-button ${activeTab === 'settings' ? 'tab-active' : ''}`}
+                className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === 'settings' 
+                    ? 'border-indigo-500 text-indigo-600' 
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
               >
                 Availability Settings
               </button>
@@ -228,55 +217,57 @@ const CreatorVideoMeetPage = () => {
       </div>
       
       {/* Main Content */}
-      <div className="main-content">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'meetings' && (
-          <div className="meetings-container">
-            <h2 className="section-title">Upcoming Support Sessions</h2>
+          <div className="space-y-6">
+            <h2 className="text-lg font-medium text-gray-900">Upcoming Support Sessions</h2>
             
             {upcomingMeetings.length > 0 ? (
-              <div className="meetings-grid">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {upcomingMeetings.map(meeting => (
-                  <div key={meeting._id} className="meeting-card">
-                    <div className="meeting-info">
-                      <div className="user-info">
-                        <img src={meeting.user.avatar} alt="User" className="user-avatar" />
-                        <div className="user-details">
-                          <h3 className="user-name">{meeting.user.name}</h3>
-                          <span className={`emotion-badge ${getEmotionColor(meeting.emotion)}`}>
-                            {meeting.emotion}
+                  <div key={meeting._id} className="bg-white rounded-lg shadow overflow-hidden">
+                    <div className="p-6">
+                      <div className="flex items-start">
+                        <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200 overflow-hidden">
+                          <img src={meeting.user.avatar} alt="User" className="h-full w-full" />
+                        </div>
+                        <div className="ml-4">
+                          <h3 className="text-base font-medium text-gray-900">{meeting.user.name}</h3>
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getEmotionColor(meeting.emotion)}`}>
+                            {meeting.emotion.charAt(0).toUpperCase() + meeting.emotion.slice(1)}
                           </span>
                         </div>
                       </div>
                       
-                      <div className="meeting-details">
-                        <div className="meeting-date">
-                          <Calendar className="detail-icon" />
+                      <div className="mt-4 space-y-3">
+                        <div className="flex items-center text-sm text-gray-500">
+                          <Calendar className="flex-shrink-0 mr-2 h-4 w-4 text-gray-400" />
                           {new Date(meeting.dateTime).toLocaleDateString()}
                         </div>
-                        <div className="meeting-time">
-                          <Clock className="detail-icon" />
+                        <div className="flex items-center text-sm text-gray-500">
+                          <Clock className="flex-shrink-0 mr-2 h-4 w-4 text-gray-400" />
                           {new Date(meeting.dateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </div>
-                        <div className="meeting-status">
-                          <span className={`status-badge ${getMeetingStatusClass(meeting.status)}`}>
+                        <div>
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getMeetingStatusClass(meeting.status)}`}>
                             {meeting.status.charAt(0).toUpperCase() + meeting.status.slice(1)}
                           </span>
                         </div>
                       </div>
                     </div>
                     
-                    <div className="meeting-actions">
+                    <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
                       {meeting.status === 'pending' && (
-                        <div className="action-buttons">
+                        <div className="flex space-x-3">
                           <button 
                             onClick={() => handleMeetingAction(meeting._id, 'accepted')}
-                            className="accept-button"
+                            className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md text-sm font-medium transition-colors shadow-sm"
                           >
                             Accept
                           </button>
                           <button 
                             onClick={() => handleMeetingAction(meeting._id, 'rejected')}
-                            className="decline-button"
+                            className="flex-1 bg-white hover:bg-gray-50 text-gray-700 py-2 px-4 border border-gray-300 rounded-md text-sm font-medium transition-colors shadow-sm"
                           >
                             Decline
                           </button>
@@ -288,50 +279,54 @@ const CreatorVideoMeetPage = () => {
                           href={meeting.meetLink || generateGoogleMeetLink()}
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="join-button"
+                          className="flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white py-2 px-4 rounded-md text-sm font-medium transition-colors shadow-sm"
                         >
-                          <Video className="join-icon" />
+                          <Video className="mr-2 h-4 w-4" />
                           Join Google Meet
                         </a>
                       )}
                       
                       {meeting.status === 'rejected' && (
-                        <p className="declined-text">This meeting was declined</p>
+                        <p className="text-center text-sm text-gray-500">This meeting was declined</p>
                       )}
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="no-meetings">
-                <Video className="no-meetings-icon" />
-                <h3 className="no-meetings-title">No upcoming meetings</h3>
-                <p className="no-meetings-text">You don't have any scheduled support sessions yet.</p>
+              <div className="bg-white rounded-lg shadow overflow-hidden text-center p-12">
+                <Video className="mx-auto h-12 w-12 text-gray-400" />
+                <h3 className="mt-2 text-sm font-medium text-gray-900">No upcoming meetings</h3>
+                <p className="mt-1 text-sm text-gray-500">You don't have any scheduled support sessions yet.</p>
               </div>
             )}
           </div>
         )}
         
         {activeTab === 'settings' && (
-          <div className="settings-container">
+          <div className="space-y-6">
             {/* Supported Emotions */}
             {availableForSupport && (
-              <div className="settings-card">
-                <div className="card-header">
-                  <h3 className="card-title">
+              <div className="bg-white shadow overflow-hidden rounded-lg">
+                <div className="px-6 py-5 border-b border-gray-200">
+                  <h3 className="text-lg font-medium leading-6 text-gray-900">
                     Supported Emotions
                   </h3>
-                  <p className="card-description">
+                  <p className="mt-1 text-sm text-gray-500">
                     Select the emotions you're able to provide support for
                   </p>
                 </div>
-                <div className="card-content">
-                  <div className="emotions-grid">
+                <div className="px-6 py-5">
+                  <div className="flex flex-wrap gap-2">
                     {emotionOptions.map(emotion => (
                       <button
                         key={emotion}
                         onClick={() => handleEmotionToggle(emotion)}
-                        className={`emotion-button ${supportEmotions.includes(emotion) ? `${getEmotionColor(emotion)} selected` : ''}`}
+                        className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
+                          supportEmotions.includes(emotion) 
+                            ? `${getEmotionColor(emotion)} ring-2 ring-offset-2 ring-white` 
+                            : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                        }`}
                       >
                         {emotion.charAt(0).toUpperCase() + emotion.slice(1)}
                       </button>
@@ -343,23 +338,23 @@ const CreatorVideoMeetPage = () => {
             
             {/* Availability Slots */}
             {availableForSupport && (
-              <div className="settings-card">
-                <div className="card-header">
-                  <h3 className="card-title">
+              <div className="bg-white shadow overflow-hidden rounded-lg">
+                <div className="px-6 py-5 border-b border-gray-200">
+                  <h3 className="text-lg font-medium leading-6 text-gray-900">
                     Weekly Availability
                   </h3>
-                  <p className="card-description">
+                  <p className="mt-1 text-sm text-gray-500">
                     Set your recurring availability for support sessions
                   </p>
                 </div>
                 
-                <div className="card-content">
-                  <div className="availability-form">
-                    <div className="availability-inputs">
+                <div className="px-6 py-5">
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <select
                         value={newAvailability.day}
                         onChange={(e) => setNewAvailability({...newAvailability, day: e.target.value})}
-                        className="day-select"
+                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       >
                         {daysOfWeek.map(day => (
                           <option key={day} value={day}>
@@ -372,50 +367,48 @@ const CreatorVideoMeetPage = () => {
                         type="time"
                         value={newAvailability.startTime}
                         onChange={(e) => setNewAvailability({...newAvailability, startTime: e.target.value})}
-                        className="time-input"
+                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       />
                       
                       <input
                         type="time"
                         value={newAvailability.endTime}
                         onChange={(e) => setNewAvailability({...newAvailability, endTime: e.target.value})}
-                        className="time-input"
+                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       />
                     </div>
                     
-                    <div className="add-availability">
-                      <button 
-                        onClick={handleAddAvailability}
-                        className="add-button"
-                      >
-                        Add Availability Slot
-                      </button>
-                    </div>
+                    <button 
+                      onClick={handleAddAvailability}
+                      className="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md text-sm font-medium transition-colors shadow-sm"
+                    >
+                      Add Availability Slot
+                    </button>
                   </div>
 
-                  <div className="availability-list">
-                    <h4 className="list-title">Your Current Availability:</h4>
+                  <div className="mt-8 pt-6 border-t border-gray-200">
+                    <h4 className="text-base font-medium text-gray-900">Your Current Availability:</h4>
                     {availability.length > 0 ? (
-                      <div className="availability-slots">
+                      <div className="mt-4 space-y-2">
                         {availability.map((slot, index) => (
-                          <div key={index} className="availability-slot">
-                            <div className="slot-info">
-                              <span className="slot-day">{slot.day}</span>
-                              <span className="slot-time">
+                          <div key={index} className="flex justify-between items-center bg-gray-50 px-4 py-3 rounded-md">
+                            <div className="flex items-center">
+                              <span className="font-medium capitalize">{slot.day}</span>
+                              <span className="ml-2 text-gray-600">
                                 {slot.startTime} - {slot.endTime}
                               </span>
                             </div>
                             <button 
                               onClick={() => handleRemoveAvailability(index)}
-                              className="remove-button"
+                              className="text-gray-400 hover:text-gray-600"
                             >
-                              <X className="remove-icon" />
+                              <X className="h-5 w-5" />
                             </button>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <p className="no-slots">No availability slots added yet</p>
+                      <p className="mt-2 text-sm italic text-gray-500">No availability slots added yet</p>
                     )}
                   </div>
                 </div>
@@ -423,675 +416,26 @@ const CreatorVideoMeetPage = () => {
             )}
             
             {/* Save Button */}
-            <div className="save-container">
+            <div className="flex justify-end">
               <button 
                 onClick={handleSaveSettings}
                 disabled={isLoading}
-                className="save-button"
+                className="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-6 rounded-md text-sm font-medium transition-colors shadow-sm disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
-                {isLoading ? 'Saving...' : 'Save All Settings'}
+                {isLoading ? (
+                  <span className="flex items-center">
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Saving...
+                  </span>
+                ) : 'Save All Settings'}
               </button>
             </div>
           </div>
         )}
       </div>
-      <style jsx>{`
-        /* Global Styles */
-        .page-container {
-          min-height: 100vh;
-          background-color: #f9fafb;
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-        
-        /* Header Styles */
-        .header {
-          background-color: #fff;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        
-        .header-content {
-          max-width: 1280px;
-          margin: 0 auto;
-          padding: 0 20px;
-        }
-        
-        .header-main {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 24px 0;
-        }
-        
-        .header-logo {
-          display: flex;
-          align-items: center;
-        }
-        
-        .logo-icon {
-          height: 32px;
-          width: 32px;
-          color: #4f46e5;
-        }
-        
-        .header-title {
-          margin-left: 12px;
-          font-size: 24px;
-          font-weight: 700;
-          color: #111827;
-        }
-        
-        .header-controls {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-        }
-        
-        /* Status Indicator */
-        .status-indicator {
-          display: flex;
-          align-items: center;
-        }
-        
-        .status-dot {
-          height: 12px;
-          width: 12px;
-          border-radius: 50%;
-          margin-right: 8px;
-        }
-        
-        .status-online {
-          background-color: #10b981;
-        }
-        
-        .status-offline {
-          background-color: #6b7280;
-        }
-        
-        .status-in-meeting {
-          background-color: #f59e0b;
-        }
-        
-        .status-text {
-          font-size: 14px;
-          font-weight: 500;
-          color: #374151;
-          text-transform: capitalize;
-        }
-        
-        /* Status Toggle */
-        .status-toggle {
-          background-color: #f3f4f6;
-          border-radius: 8px;
-          padding: 4px;
-          display: flex;
-        }
-        
-        .status-button {
-          padding: 8px 12px;
-          border-radius: 6px;
-          font-size: 14px;
-          background: none;
-          border: none;
-          cursor: pointer;
-          color: #6b7280;
-        }
-        
-        .status-button-active {
-          background-color: #fff;
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-          color: #4f46e5;
-        }
-        
-        /* Availability Toggle */
-        .availability-toggle {
-          display: flex;
-          align-items: center;
-          cursor: pointer;
-        }
-        
-        .toggle-input {
-          position: absolute;
-          opacity: 0;
-          height: 0;
-          width: 0;
-        }
-        
-        .toggle-slider {
-          position: relative;
-          display: inline-block;
-          width: 44px;
-          height: 24px;
-          background-color: #e5e7eb;
-          border-radius: 24px;
-          transition: 0.4s;
-        }
-        
-        .toggle-slider:before {
-          position: absolute;
-          content: "";
-          height: 20px;
-          width: 20px;
-          left: 2px;
-          bottom: 2px;
-          background-color: white;
-          border-radius: 50%;
-          transition: 0.4s;
-        }
-        
-        .toggle-input:checked + .toggle-slider {
-          background-color: #4f46e5;
-        }
-        
-        .toggle-input:checked + .toggle-slider:before {
-          transform: translateX(20px);
-        }
-        
-        .toggle-label {
-          margin-left: 12px;
-          font-size: 14px;
-          font-weight: 500;
-          color: #374151;
-        }
-        
-        /* Navigation Tabs */
-        .navigation-tabs {
-          border-bottom: 1px solid #e5e7eb;
-        }
-        
-        .tabs-container {
-          display: flex;
-          gap: 32px;
-        }
-        
-        .tab-button {
-          padding: 16px 4px;
-          font-size: 14px;
-          font-weight: 500;
-          background: none;
-          border: none;
-          border-bottom: 2px solid transparent;
-          cursor: pointer;
-          color: #6b7280;
-        }
-        
-        .tab-button:hover {
-          color: #374151;
-          border-color: #d1d5db;
-        }
-        
-        .tab-active {
-          color: #4f46e5;
-          border-color: #4f46e5;
-        }
-        
-        /* Main Content */
-        .main-content {
-          max-width: 1280px;
-          margin: 0 auto;
-          padding: 32px 20px;
-        }
-        
-        .section-title {
-          font-size: 18px;
-          font-weight: 500;
-          color: #111827;
-          margin-bottom: 24px;
-        }
-        
-        /* Meetings Grid */
-        .meetings-grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 24px;
-        }
-        
-        @media (min-width: 768px) {
-          .meetings-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-        
-        @media (min-width: 1024px) {
-          .meetings-grid {
-            grid-template-columns: repeat(3, 1fr);
-          }
-        }
-        
-        /* Meeting Card */
-        .meeting-card {
-          background-color: #fff;
-          border-radius: 8px;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-          overflow: hidden;
-        }
-        
-        .meeting-info {
-          padding: 24px;
-        }
-        
-        .user-info {
-          display: flex;
-          align-items: center;
-          margin-bottom: 16px;
-        }
-        
-        .user-avatar {
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          background-color: #f3f4f6;
-        }
-        
-        .user-details {
-          margin-left: 12px;
-        }
-        
-        .user-name {
-          font-size: 14px;
-          font-weight: 500;
-          color: #111827;
-        }
-        
-        .emotion-badge {
-          display: inline-flex;
-          align-items: center;
-          padding: 4px 8px;
-          border-radius: 9999px;
-          font-size: 12px;
-          font-weight: 500;
-        }
-        
-        .emotion-sad {
-          background-color: #dbeafe;
-          color: #1e40af;
-        }
-        
-        .emotion-anxious {
-          background-color: #fef3c7;
-          color: #92400e;
-        }
-        
-        .emotion-angry {
-          background-color: #fee2e2;
-          color: #b91c1c;
-        }
-        
-        .emotion-lonely {
-          background-color: #f3e8ff;
-          color: #6b21a8;
-        }
-        
-        .emotion-stressed {
-          background-color: #ffedd5;
-          color: #9a3412;
-        }
-        
-        .emotion-default {
-          background-color: #f3f4f6;
-          color: #374151;
-        }
-        
-        .meeting-details {
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
-        
-        .meeting-date, .meeting-time {
-          display: flex;
-          align-items: center;
-          font-size: 14px;
-          color: #6b7280;
-        }
-        
-        .detail-icon {
-          margin-right: 6px;
-          height: 20px;
-          width: 20px;
-          color: #9ca3af;
-        }
-        
-        .status-badge {
-          display: inline-flex;
-          padding: 4px 8px;
-          border-radius: 9999px;
-          font-size: 12px;
-          font-weight: 500;
-        }
-        
-        .meeting-pending {
-          background-color: #fef3c7;
-          color: #92400e;
-        }
-        
-        .meeting-accepted {
-          background-color: #d1fae5;
-          color: #065f46;
-        }
-        
-        .meeting-rejected {
-          background-color: #fee2e2;
-          color: #b91c1c;
-        }
-        
-        .meeting-actions {
-          padding: 16px 24px;
-          background-color: #f9fafb;
-          border-top: 1px solid #f3f4f6;
-        }
-        
-        .action-buttons {
-          display: flex;
-          gap: 12px;
-        }
-        
-        .accept-button {
-          flex: 1;
-          padding: 8px 16px;
-          background-color: #4f46e5;
-          color: white;
-          border: none;
-          border-radius: 6px;
-          font-size: 14px;
-          font-weight: 500;
-          cursor: pointer;
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-        
-        .accept-button:hover {
-          background-color: #4338ca;
-        }
-        
-        .decline-button {
-          flex: 1;
-          padding: 8px 16px;
-          background-color: white;
-          color: #374151;
-          border: 1px solid #d1d5db;
-          border-radius: 6px;
-          font-size: 14px;
-          font-weight: 500;
-          cursor: pointer;
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-        
-        .decline-button:hover {
-          background-color: #f9fafb;
-        }
-        
-        .join-button {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 100%;
-          padding: 8px 16px;
-          background-color: #10b981;
-          color: white;
-          border: none;
-          border-radius: 6px;
-          font-size: 14px;
-          font-weight: 500;
-          text-decoration: none;
-          cursor: pointer;
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-        
-        .join-button:hover {
-          background-color: #059669;
-        }
-        
-        .join-icon {
-          margin-right: 8px;
-          height: 20px;
-          width: 20px;
-        }
-        
-        .declined-text {
-          text-align: center;
-          font-size: 14px;
-          color: #6b7280;
-        }
-        
-        /* No Meetings */
-        .no-meetings {
-          text-align: center;
-          padding: 48px;
-          background-color: white;
-          border-radius: 8px;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        
-        .no-meetings-icon {
-          height: 48px;
-          width: 48px;
-          color: #9ca3af;
-          margin: 0 auto;
-        }
-        
-        .no-meetings-title {
-          margin-top: 8px;
-          font-size: 14px;
-          font-weight: 500;
-          color: #111827;
-        }
-        
-        .no-meetings-text {
-          margin-top: 4px;
-          font-size: 14px;
-          color: #6b7280;
-        }
-        
-        /* Settings Container */
-        .settings-container {
-          display: flex;
-          flex-direction: column;
-          gap: 32px;
-        }
-        
-        /* Settings Card */
-        .settings-card {
-          background-color: white;
-          border-radius: 8px;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-          overflow: hidden;
-        }
-        
-        .card-header {
-          padding: 20px 24px;
-          border-bottom: 1px solid #e5e7eb;
-        }
-        
-        .card-title {
-          font-size: 18px;
-          font-weight: 500;
-          color: #111827;
-        }
-        
-        .card-description {
-          margin-top: 4px;
-          font-size: 14px;
-          color: #6b7280;
-        }
-        
-        .card-content {
-          padding: 20px 24px;
-        }
-        
-        /* Emotions Grid */
-        .emotions-grid {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px;
-        }
-        
-        .emotion-button {
-          padding: 8px 16px;
-          border-radius: 9999px;
-          font-size: 14px;
-          font-weight: 500;
-          background-color: #f3f4f6;
-          color: #374151;
-          border: none;
-          cursor: pointer;
-        }
-        
-        .emotion-button:hover {
-          background-color: #e5e7eb;
-        }
-        
-        .emotion-button.selected {
-          box-shadow: 0 0 0 2px white, 0 0 0 4px;
-        }
-        
-        /* Availability Form */
-        .availability-form {
-          margin-bottom: 24px;
-        }
-        
-        .availability-inputs {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 16px;
-        }
-        
-        @media (min-width: 768px) {
-          .availability-inputs {
-            grid-template-columns: repeat(3, 1fr);
-          }
-        }
-        
-        .day-select,
-        .time-input {
-          width: 100%;
-          padding: 8px 12px;
-          border: 1px solid #d1d5db;
-          border-radius: 6px;
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-        
-        .day-select:focus,
-        .time-input:focus {
-          outline: none;
-          border-color: #4f46e5;
-          box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.3);
-        }
-        
-        .add-availability {
-          margin-top: 16px;
-        }
-        
-        .add-button {
-          width: 100%;
-          padding: 8px 16px;
-          background-color: #4f46e5;
-          color: white;
-          border: none;
-          border-radius: 6px;
-          font-size: 14px;
-          font-weight: 500;
-          cursor: pointer;
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-        
-        .add-button:hover {
-          background-color: #4338ca;
-        }
-        
-        /* Availability List */
-        .availability-list {
-          padding-top: 24px;
-          border-top: 1px solid #e5e7eb;
-        }
-        
-        .list-title {
-          font-size: 16px;
-          font-weight: 500;
-          color: #111827;
-          margin-bottom: 16px;
-        }
-        
-        .availability-slots {
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
-        
-        .availability-slot {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 12px;
-          background-color: #f9fafb;
-          border-radius: 6px;
-        }
-        
-        .slot-info {
-          display: flex;
-          align-items: center;
-        }
-        
-        .slot-day {
-          font-weight: 500;
-          text-transform: capitalize;
-          color: #111827;
-        }
-        
-        .slot-time {
-          margin-left: 8px;
-          color: #6b7280;
-        }
-        
-        .remove-button {
-          background: none;
-          border: none;
-          cursor: pointer;
-          color: #9ca3af;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        
-        .remove-button:hover {
-          color: #6b7280;
-        }
-        
-        .remove-icon {
-          height: 20px;
-          width: 20px;
-        }
-        
-        .no-slots {
-          font-style: italic;
-          color: #6b7280;
-        }
-        
-        /* Save Container */
-        .save-container {
-          display: flex;
-          justify-content: flex-end;
-        }
-        
-        .save-button {
-          padding: 8px 16px;
-          background-color: #4f46e5;
-          color: white;
-          border: none;
-          border-radius: 6px;
-          font-size: 14px;
-          font-weight: 500;
-          cursor: pointer;
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-        
-        .save-button:hover {
-          background-color: #4338ca;
-        }
-        
-        .save-button:disabled {
-          background-color: #6b7280;
-          cursor: not-allowed;
-        }
-      `}</style>
     </div>
   );
 };

@@ -2,20 +2,16 @@ import React, { useState } from "react";
 import { Heart, Eye, BookOpen, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-
 const DashboardSections = (props) => {
   const [hoveredSection, setHoveredSection] = useState(null);
   const [selectedSection, setSelectedSection] = useState(null);
   const navigate = useNavigate();
 
-
-  // Enhanced sections with more emotionally-focused descriptions and added icons
   const sections = [
     {
       id: "visuals",
       name: "Visual Journey",
-      description:
-        "Experience emotions through captivating videos, artwork, and visual stories that inspire and move you.",
+      description: "Experience emotions through captivating videos, artwork, and visual stories that inspire and move you.",
       icon: Eye,
       color: "bg-gradient-to-br from-purple-500 to-pink-500",
       hoverColor: "from-purple-600 to-pink-600",
@@ -24,8 +20,7 @@ const DashboardSections = (props) => {
     {
       id: "cultural",
       name: "Emotional Stories",
-      description:
-        "Discover poems, letters, and stories that capture the depth and richness of human emotions across cultures.",
+      description: "Discover poems, letters, and stories that capture the depth and richness of human emotions across cultures.",
       icon: BookOpen,
       color: "bg-gradient-to-br from-blue-500 to-teal-500",
       hoverColor: "from-blue-600 to-teal-600",
@@ -34,25 +29,23 @@ const DashboardSections = (props) => {
     {
       id: "meeting",
       name: "Connect & Share",
-      description:
-        "Join others in exploring emotions together through guided sessions and meaningful exchanges.",
+      description: "Join others in exploring emotions together through guided sessions and meaningful exchanges.",
       icon: Users,
       color: "bg-gradient-to-br from-amber-500 to-rose-500",
       hoverColor: "from-amber-600 to-rose-600",
-      route:"/user/video-meet",
-      
+      route: "/user/video-meet",
     },
   ];
 
   const handleCardClick = (section) => {
     setSelectedSection(section.id);
     if (section.route) {
-        navigate(section.route); 
-      }
+      navigate(section.route); 
+    }
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6 md:p-12">
+    <div className="min-h-screen bg-slate-50 pt-20 pb-6 px-6 md:pt-24 md:px-12"> {/* Added pt-20 (or pt-24 for larger screens) */}
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <div className="flex justify-center mb-4">
@@ -126,7 +119,6 @@ const DashboardSections = (props) => {
   );
 };
 
-// Default props to avoid errors when onSectionSelect is not provided
 DashboardSections.defaultProps = {
   onSectionSelect: () => {},
 };
