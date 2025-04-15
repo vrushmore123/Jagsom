@@ -48,7 +48,7 @@ const CreatorDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6 md:p-12">
+    <div className="min-h-screen bg-slate-50 p-6 pt-20">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <div className="flex justify-center mb-4">

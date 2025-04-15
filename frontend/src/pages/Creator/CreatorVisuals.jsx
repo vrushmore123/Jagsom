@@ -10,7 +10,6 @@ const CreatorVisuals = () => {
   const [creatorId, setCreatorId] = useState(null);
   const [token, setToken] = useState(null);
 
-  // Fetch creatorId and token from localStorage on component mount
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const storedCreatorId = localStorage.getItem("creatorId");
@@ -59,55 +58,59 @@ const CreatorVisuals = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 mt-10 rounded-xl shadow-lg bg-gradient-to-br from-pink-200 via-yellow-100 to-green-100">
-      <h2 className="text-2xl font-bold text-center mb-6 text-purple-700">
-        Post a Visual
-      </h2>
+    <div className="min-h-screen pt-16 pb-6 bg-gradient-to-br from-pink-50 via-yellow-50 to-green-50 pt-40"> {/* Added pt-16 for navbar spacing */}
+      <div className="max-w-xl mx-auto p-6 rounded-xl shadow-lg bg-white"> {/* Removed gradient from form container */}
+        <h2 className="text-2xl font-bold text-center mb-6 text-purple-700">
+          Post a Visual
+        </h2>
 
-      {message && (
-        <div className="mb-4 text-center text-sm text-red-600 font-semibold">
-          {message}
-        </div>
-      )}
+        {message && (
+          <div className={`mb-4 text-center text-sm font-semibold ${
+            message.includes("success") ? "text-green-600" : "text-red-600"
+          }`}>
+            {message}
+          </div>
+        )}
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <select
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          className="p-2 border border-gray-300 rounded"
-          required
-        >
-          <option value="">Select Type</option>
-          <option value="Poems">Poems</option>
-          <option value="Handwritten Letters">Handwritten Letters</option>
-          <option value="Live Concerts">Live Concerts</option>
-          <option value="Drawings">Drawings</option>
-        </select>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            className="p-2 border border-gray-300 rounded focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition"
+            required
+          >
+            <option value="">Select Type</option>
+            <option value="Poems">Poems</option>
+            <option value="Handwritten Letters">Handwritten Letters</option>
+            <option value="Live Concerts">Live Concerts</option>
+            <option value="Drawings">Drawings</option>
+          </select>
 
-        <textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          rows="5"
-          placeholder="Write your content here..."
-          className="p-3 border border-gray-300 rounded resize-none"
-          required
-        />
+          <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            rows="5"
+            placeholder="Write your content here..."
+            className="p-3 border border-gray-300 rounded resize-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition"
+            required
+          />
 
-        <input
-          type="text"
-          value={mediaUrl}
-          onChange={(e) => setMediaUrl(e.target.value)}
-          placeholder="Optional media URL (image or video)"
-          className="p-2 border border-gray-300 rounded"
-        />
+          <input
+            type="text"
+            value={mediaUrl}
+            onChange={(e) => setMediaUrl(e.target.value)}
+            placeholder="Optional media URL (image or video)"
+            className="p-2 border border-gray-300 rounded focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition"
+          />
 
-        <button
-          type="submit"
-          className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition"
-        >
-          Post Visual
-        </button>
-      </form>
+          <button
+            type="submit"
+            className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition transform hover:-translate-y-0.5 hover:shadow-md"
+          >
+            Post Visual
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

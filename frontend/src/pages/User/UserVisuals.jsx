@@ -60,7 +60,7 @@ export default function VisualsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-pink-50 to-purple-100 p-10">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-pink-50 to-purple-100 p-10 pt-20">
       <h1 className="text-4xl font-bold text-center text-purple-700 mb-10">
         🎨 Funky Visuals
       </h1>
