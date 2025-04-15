@@ -29,6 +29,7 @@ const DashboardSections = (props) => {
       icon: BookOpen,
       color: "bg-gradient-to-br from-blue-500 to-teal-500",
       hoverColor: "from-blue-600 to-teal-600",
+      route: "/user/culturedashboard",
     },
     {
       id: "meeting",
@@ -38,6 +39,7 @@ const DashboardSections = (props) => {
       icon: Users,
       color: "bg-gradient-to-br from-amber-500 to-rose-500",
       hoverColor: "from-amber-600 to-rose-600",
+      route:"/user/video-meet",
       
     },
   ];
