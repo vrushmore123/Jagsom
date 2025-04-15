@@ -62,26 +62,26 @@ const CreatorVideoMeetPage = () => {
     }
   }, [upcomingMeetings.length]);
 
-  useEffect(() => {
-    // Fetch creator's existing settings and meetings
-    const fetchCreatorData = async () => {
-      try {
-        const response = await fetch('/api/creators/profile');
-        if (response.ok) {
-          const data = await response.json();
-          setAvailableForSupport(data.availableForSupport);
-          setSupportEmotions(data.supportEmotions);
-          setAvailability(data.availability);
-          setUpcomingMeetings(data.upcomingMeetings);
-          setCurrentStatus(data.currentStatus);
-        }
-      } catch (error) {
-        console.error('Error fetching creator data:', error);
-      }
-    };
-    // Comment out to use mock data instead
-    // fetchCreatorData();
-  }, []);
+//   useEffect(() => {
+//     // Fetch creator's existing settings and meetings
+//     const fetchCreatorData = async () => {
+//       try {
+//         const response = await fetch('/api/creators/profile');
+//         if (response.ok) {
+//           const data = await response.json();
+//           setAvailableForSupport(data.availableForSupport);
+//           setSupportEmotions(data.supportEmotions);
+//           setAvailability(data.availability);
+//           setUpcomingMeetings(data.upcomingMeetings);
+//           setCurrentStatus(data.currentStatus);
+//         }
+//       } catch (error) {
+//         console.error('Error fetching creator data:', error);
+//       }
+//     };
+//     // Comment out to use mock data instead
+//     // fetchCreatorData();
+//   }, []);
 
   const handleEmotionToggle = (emotion) => {
     setSupportEmotions(prev =>
