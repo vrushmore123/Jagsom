@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3000;
 // Connect to database
 connectDB();
 
-const cors = require('cors');
+
 
 app.use(cors({
   origin: ['http://localhost:5173', 'https://jagsom-2.onrender.com'],
